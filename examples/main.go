@@ -14,6 +14,7 @@ import (
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 	"github.com/markbates/goth/providers/amazon"
+	"github.com/markbates/goth/providers/apple"
 	"github.com/markbates/goth/providers/auth0"
 	"github.com/markbates/goth/providers/azuread"
 	"github.com/markbates/goth/providers/battlenet"
@@ -27,33 +28,44 @@ import (
 	"github.com/markbates/goth/providers/eveonline"
 	"github.com/markbates/goth/providers/facebook"
 	"github.com/markbates/goth/providers/fitbit"
+	"github.com/markbates/goth/providers/gitea"
 	"github.com/markbates/goth/providers/github"
 	"github.com/markbates/goth/providers/gitlab"
+	"github.com/markbates/goth/providers/google"
 	"github.com/markbates/goth/providers/gplus"
 	"github.com/markbates/goth/providers/heroku"
 	"github.com/markbates/goth/providers/instagram"
 	"github.com/markbates/goth/providers/intercom"
+	"github.com/markbates/goth/providers/kakao"
 	"github.com/markbates/goth/providers/lastfm"
+	"github.com/markbates/goth/providers/line"
 	"github.com/markbates/goth/providers/linkedin"
 	"github.com/markbates/goth/providers/meetup"
 	"github.com/markbates/goth/providers/microsoftonline"
+	"github.com/markbates/goth/providers/naver"
+	"github.com/markbates/goth/providers/nextcloud"
 	"github.com/markbates/goth/providers/onedrive"
 	"github.com/markbates/goth/providers/openidConnect"
 	"github.com/markbates/goth/providers/paypal"
 	"github.com/markbates/goth/providers/salesforce"
+	"github.com/markbates/goth/providers/seatalk"
+	"github.com/markbates/goth/providers/shopify"
 	"github.com/markbates/goth/providers/slack"
 	"github.com/markbates/goth/providers/soundcloud"
 	"github.com/markbates/goth/providers/spotify"
 	"github.com/markbates/goth/providers/steam"
+	"github.com/markbates/goth/providers/strava"
 	"github.com/markbates/goth/providers/stripe"
 	"github.com/markbates/goth/providers/twitch"
 	"github.com/markbates/goth/providers/twitter"
+	"github.com/markbates/goth/providers/typetalk"
 	"github.com/markbates/goth/providers/uber"
 	"github.com/markbates/goth/providers/vk"
 	"github.com/markbates/goth/providers/wepay"
 	"github.com/markbates/goth/providers/xero"
 	"github.com/markbates/goth/providers/yahoo"
 	"github.com/markbates/goth/providers/yammer"
+	"github.com/markbates/goth/providers/yandex"
 )
 
 func main() {
@@ -64,10 +76,12 @@ func main() {
 
 		facebook.New(os.Getenv("FACEBOOK_KEY"), os.Getenv("FACEBOOK_SECRET"), "http://localhost:3000/auth/facebook/callback"),
 		fitbit.New(os.Getenv("FITBIT_KEY"), os.Getenv("FITBIT_SECRET"), "http://localhost:3000/auth/fitbit/callback"),
+		google.New(os.Getenv("GOOGLE_KEY"), os.Getenv("GOOGLE_SECRET"), "http://localhost:3000/auth/google/callback"),
 		gplus.New(os.Getenv("GPLUS_KEY"), os.Getenv("GPLUS_SECRET"), "http://localhost:3000/auth/gplus/callback"),
 		github.New(os.Getenv("GITHUB_KEY"), os.Getenv("GITHUB_SECRET"), "http://localhost:3000/auth/github/callback"),
 		spotify.New(os.Getenv("SPOTIFY_KEY"), os.Getenv("SPOTIFY_SECRET"), "http://localhost:3000/auth/spotify/callback"),
 		linkedin.New(os.Getenv("LINKEDIN_KEY"), os.Getenv("LINKEDIN_SECRET"), "http://localhost:3000/auth/linkedin/callback"),
+		line.New(os.Getenv("LINE_KEY"), os.Getenv("LINE_SECRET"), "http://localhost:3000/auth/line/callback", "profile", "openid", "email"),
 		lastfm.New(os.Getenv("LASTFM_KEY"), os.Getenv("LASTFM_SECRET"), "http://localhost:3000/auth/lastfm/callback"),
 		twitch.New(os.Getenv("TWITCH_KEY"), os.Getenv("TWITCH_SECRET"), "http://localhost:3000/auth/twitch/callback"),
 		dropbox.New(os.Getenv("DROPBOX_KEY"), os.Getenv("DROPBOX_SECRET"), "http://localhost:3000/auth/dropbox/callback"),
@@ -77,6 +91,7 @@ func main() {
 		intercom.New(os.Getenv("INTERCOM_KEY"), os.Getenv("INTERCOM_SECRET"), "http://localhost:3000/auth/intercom/callback"),
 		box.New(os.Getenv("BOX_KEY"), os.Getenv("BOX_SECRET"), "http://localhost:3000/auth/box/callback"),
 		salesforce.New(os.Getenv("SALESFORCE_KEY"), os.Getenv("SALESFORCE_SECRET"), "http://localhost:3000/auth/salesforce/callback"),
+		seatalk.New(os.Getenv("SEATALK_KEY"), os.Getenv("SEATALK_SECRET"), "http://localhost:3000/auth/seatalk/callback"),
 		amazon.New(os.Getenv("AMAZON_KEY"), os.Getenv("AMAZON_SECRET"), "http://localhost:3000/auth/amazon/callback"),
 		yammer.New(os.Getenv("YAMMER_KEY"), os.Getenv("YAMMER_SECRET"), "http://localhost:3000/auth/yammer/callback"),
 		onedrive.New(os.Getenv("ONEDRIVE_KEY"), os.Getenv("ONEDRIVE_SECRET"), "http://localhost:3000/auth/onedrive/callback"),
@@ -84,10 +99,12 @@ func main() {
 		microsoftonline.New(os.Getenv("MICROSOFTONLINE_KEY"), os.Getenv("MICROSOFTONLINE_SECRET"), "http://localhost:3000/auth/microsoftonline/callback"),
 		battlenet.New(os.Getenv("BATTLENET_KEY"), os.Getenv("BATTLENET_SECRET"), "http://localhost:3000/auth/battlenet/callback"),
 		eveonline.New(os.Getenv("EVEONLINE_KEY"), os.Getenv("EVEONLINE_SECRET"), "http://localhost:3000/auth/eveonline/callback"),
+		kakao.New(os.Getenv("KAKAO_KEY"), os.Getenv("KAKAO_SECRET"), "http://localhost:3000/auth/kakao/callback"),
 
 		//Pointed localhost.com to http://localhost:3000/auth/yahoo/callback through proxy as yahoo
 		// does not allow to put custom ports in redirection uri
 		yahoo.New(os.Getenv("YAHOO_KEY"), os.Getenv("YAHOO_SECRET"), "http://localhost.com"),
+		typetalk.New(os.Getenv("TYPETALK_KEY"), os.Getenv("TYPETALK_SECRET"), "http://localhost:3000/auth/typetalk/callback", "my"),
 		slack.New(os.Getenv("SLACK_KEY"), os.Getenv("SLACK_SECRET"), "http://localhost:3000/auth/slack/callback"),
 		stripe.New(os.Getenv("STRIPE_KEY"), os.Getenv("STRIPE_SECRET"), "http://localhost:3000/auth/stripe/callback"),
 		wepay.New(os.Getenv("WEPAY_KEY"), os.Getenv("WEPAY_SECRET"), "http://localhost:3000/auth/wepay/callback", "view_user"),
@@ -108,6 +125,13 @@ func main() {
 		auth0.New(os.Getenv("AUTH0_KEY"), os.Getenv("AUTH0_SECRET"), "http://localhost:3000/auth/auth0/callback", os.Getenv("AUTH0_DOMAIN")),
 		xero.New(os.Getenv("XERO_KEY"), os.Getenv("XERO_SECRET"), "http://localhost:3000/auth/xero/callback"),
 		vk.New(os.Getenv("VK_KEY"), os.Getenv("VK_SECRET"), "http://localhost:3000/auth/vk/callback"),
+		naver.New(os.Getenv("NAVER_KEY"), os.Getenv("NAVER_SECRET"), "http://localhost:3000/auth/naver/callback"),
+		yandex.New(os.Getenv("YANDEX_KEY"), os.Getenv("YANDEX_SECRET"), "http://localhost:3000/auth/yandex/callback"),
+		nextcloud.NewCustomisedDNS(os.Getenv("NEXTCLOUD_KEY"), os.Getenv("NEXTCLOUD_SECRET"), "http://localhost:3000/auth/nextcloud/callback", os.Getenv("NEXTCLOUD_URL")),
+		gitea.New(os.Getenv("GITEA_KEY"), os.Getenv("GITEA_SECRET"), "http://localhost:3000/auth/gitea/callback"),
+		shopify.New(os.Getenv("SHOPIFY_KEY"), os.Getenv("SHOPIFY_SECRET"), "http://localhost:3000/auth/shopify/callback", shopify.ScopeReadCustomers, shopify.ScopeReadOrders),
+		apple.New(os.Getenv("APPLE_KEY"), os.Getenv("APPLE_SECRET"), "http://localhost:3000/auth/apple/callback", nil, apple.ScopeName, apple.ScopeEmail),
+		strava.New(os.Getenv("STRAVA_KEY"), os.Getenv("STRAVA_SECRET"), "http://localhost:3000/auth/strava/callback"),
 	)
 
 	// OpenID Connect is based on OpenID Connect Auto Discovery URL (https://openid.net/specs/openid-connect-discovery-1_0-17.html)
@@ -130,8 +154,12 @@ func main() {
 	m["eveonline"] = "Eve Online"
 	m["facebook"] = "Facebook"
 	m["fitbit"] = "Fitbit"
+	m["gitea"] = "Gitea"
 	m["github"] = "Github"
 	m["gitlab"] = "Gitlab"
+	m["google"] = "Google"
+	m["gplus"] = "Google Plus"
+	m["shopify"] = "Shopify"
 	m["soundcloud"] = "SoundCloud"
 	m["spotify"] = "Spotify"
 	m["steam"] = "Steam"
@@ -141,12 +169,13 @@ func main() {
 	m["wepay"] = "Wepay"
 	m["yahoo"] = "Yahoo"
 	m["yammer"] = "Yammer"
-	m["gplus"] = "Google Plus"
 	m["heroku"] = "Heroku"
 	m["instagram"] = "Instagram"
 	m["intercom"] = "Intercom"
+	m["kakao"] = "Kakao"
 	m["lastfm"] = "Last FM"
 	m["linkedin"] = "Linkedin"
+	m["line"] = "LINE"
 	m["onedrive"] = "Onedrive"
 	m["azuread"] = "Azure AD"
 	m["microsoftonline"] = "Microsoft Online"
@@ -154,12 +183,19 @@ func main() {
 	m["paypal"] = "Paypal"
 	m["twitter"] = "Twitter"
 	m["salesforce"] = "Salesforce"
+	m["typetalk"] = "Typetalk"
 	m["slack"] = "Slack"
 	m["meetup"] = "Meetup.com"
 	m["auth0"] = "Auth0"
 	m["openid-connect"] = "OpenID Connect"
 	m["xero"] = "Xero"
 	m["vk"] = "VK"
+	m["naver"] = "Naver"
+	m["yandex"] = "Yandex"
+	m["nextcloud"] = "NextCloud"
+	m["seatalk"] = "SeaTalk"
+	m["apple"] = "Apple"
+	m["strava"] = "Strava"
 
 	var keys []string
 	for k := range m {
@@ -201,6 +237,7 @@ func main() {
 		t, _ := template.New("foo").Parse(indexTemplate)
 		t.Execute(res, providerIndex)
 	})
+	log.Println("listening on localhost:3000")
 	log.Fatal(http.ListenAndServe(":3000", p))
 }
 

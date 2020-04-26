@@ -3,23 +3,24 @@ Package gothic wraps common behaviour when using Goth. This makes it quick, and 
 and running with Goth. Of course, if you want complete control over how things flow, in regards
 to the authentication process, feel free and use Goth directly.
 
-See https://github.com/markbates/goth/examples/main.go to see this in action.
+See https://github.com/markbates/goth/blob/master/examples/main.go to see this in action.
 */
 package gothic
 
 import (
 	"bytes"
 	"compress/gzip"
+	"context"
+	"crypto/rand"
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
-	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
@@ -35,7 +36,10 @@ var defaultStore sessions.Store
 
 var keySet = false
 
-var gothicRand *rand.Rand
+type key int
+
+// ProviderParamKey can be used as a key in context when passing in a provider
+const ProviderParamKey key = iota
 
 func init() {
 	key := []byte(os.Getenv("SESSION_SECRET"))
@@ -45,7 +49,6 @@ func init() {
 	cookieStore.Options.HttpOnly = true
 	Store = cookieStore
 	defaultStore = Store
-	gothicRand = rand.New(rand.NewSource(time.Now().UnixNano()))
 }
 
 /*
@@ -85,8 +88,9 @@ var SetState = func(req *http.Request) string {
 	//
 	// https://auth0.com/docs/protocols/oauth2/oauth-state#keep-reading
 	nonceBytes := make([]byte, 64)
-	for i := 0; i < 64; i++ {
-		nonceBytes[i] = byte(gothicRand.Int63() % 256)
+	_, err := io.ReadFull(rand.Reader, nonceBytes)
+	if err != nil {
+		panic("gothic: source of randomness unavailable: " + err.Error())
 	}
 	return base64.URLEncoding.EncodeToString(nonceBytes)
 }
@@ -247,19 +251,6 @@ var GetProviderName = getProviderName
 
 func getProviderName(req *http.Request) (string, error) {
 
-	// get all the used providers
-	providers := goth.GetProviders()
-
-	// loop over the used providers, if we already have a valid session for any provider (ie. user is already logged-in with a provider), then return that provider name
-	for _, provider := range providers {
-		p := provider.Name()
-		session, _ := Store.Get(req, p+SessionName)
-		value := session.Values[p]
-		if _, ok := value.(string); ok {
-			return p, nil
-		}
-	}
-
 	// try to get it from the url param "provider"
 	if p := req.URL.Query().Get("provider"); p != "" {
 		return p, nil
@@ -280,13 +271,34 @@ func getProviderName(req *http.Request) (string, error) {
 		return p, nil
 	}
 
+	// try to get it from the go-context's value of providerContextKey key
+	if p, ok := req.Context().Value(ProviderParamKey).(string); ok {
+		return p, nil
+	}
+
+	// As a fallback, loop over the used providers, if we already have a valid session for any provider (ie. user has already begun authentication with a provider), then return that provider name
+	providers := goth.GetProviders()
+	session, _ := Store.Get(req, SessionName)
+	for _, provider := range providers {
+		p := provider.Name()
+		value := session.Values[p]
+		if _, ok := value.(string); ok {
+			return p, nil
+		}
+	}
+
 	// if not found then return an empty string with the corresponding error
 	return "", errors.New("you must select a provider")
 }
 
+// GetContextWithProvider returns a new request context containing the provider
+func GetContextWithProvider(req *http.Request, provider string) *http.Request {
+	return req.WithContext(context.WithValue(req.Context(), ProviderParamKey, provider))
+}
+
 // StoreInSession stores a specified key/value pair in the session.
 func StoreInSession(key string, value string, req *http.Request, res http.ResponseWriter) error {
-	session, _ := Store.Get(req, SessionName)
+	session, _ := Store.New(req, SessionName)
 
 	if err := updateSessionValue(session, key, value); err != nil {
 		return err

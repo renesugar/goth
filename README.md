@@ -8,10 +8,6 @@ protocol providers, as long as they implement the `Provider` and `Session` inter
 
 This package was inspired by [https://github.com/intridea/omniauth](https://github.com/intridea/omniauth).
 
-## Goth Needs a New Maintainer
-
-[https://blog.gobuffalo.io/goth-needs-a-new-maintainer-626cd47ca37b](https://blog.gobuffalo.io/goth-needs-a-new-maintainer-626cd47ca37b) - TL;DR: I, @markbates, won't be responding to any more issues, PRs, etc... for this package. A new maintainer needs to be found ASAP. Is this you?
-
 ## Installation
 
 ```text
@@ -21,6 +17,7 @@ $ go get github.com/markbates/goth
 ## Supported Providers
 
 * Amazon
+* Apple
 * Auth0
 * Azure AD
 * Battle.net
@@ -35,34 +32,46 @@ $ go get github.com/markbates/goth
 * Eve Online
 * Facebook
 * Fitbit
+* Gitea
 * GitHub
 * Gitlab
-* Google+
+* Google
+* Google+ (deprecated)
 * Heroku
 * InfluxCloud
 * Instagram
 * Intercom
+* Kakao
 * Lastfm
 * Linkedin
+* LINE
+* Mailru
 * Meetup
 * MicrosoftOnline
+* Naver
+* Nextcloud
 * OneDrive
 * OpenID Connect (auto discovery)
 * Paypal
 * SalesForce
+* Shopify
 * Slack
 * Soundcloud
 * Spotify
 * Steam
+* Strava
 * Stripe
+* Tumblr
 * Twitch
 * Twitter
+* Typetalk
 * Uber
 * VK
 * Wepay
 * Xero
 * Yahoo
 * Yammer
+* Yandex
 
 ## Examples
 
@@ -107,7 +116,7 @@ As configured, this default store (`gothic.Store`) will generate cookies with `O
 
 To tailor these fields for your application, you can override the `gothic.Store` variable at startup.
 
-The follow snippet show one way to do this:
+The following snippet shows one way to do this:
 
 ```go
 key := ""             // Replace with your SESSION_SECRET or similar
